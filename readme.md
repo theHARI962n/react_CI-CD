@@ -2,6 +2,5 @@
 
 basic Practise
 
-Restarting my practise
-
+Restarting my practise.
 
