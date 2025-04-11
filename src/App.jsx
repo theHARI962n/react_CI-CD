@@ -1,48 +1,21 @@
 import { useState } from 'react'
-import reactLogo from './assets/react-core-concepts.png'
-import componentsImg from './assets/components.png'
+// import componentsImg from './assets/components.png'
 import { CORE_CONCEPTS } from './data'
-
+import Header from './components/Header.jsx'
+import CoreConcepts from './components/CoreConcepts.jsx'
+import TabButton from './components/TabButton.jsx'
+import { EXAMPLES } from './data.js'
 //import './App.css'
 
-const reactDescriptions = ['Fundamental','Crucial' ,'Core']
-
-function getRandInt(max) {
-  return Math.floor(Math.random() * (max+1));
-}
-
-
-
-function Header(){
-  const word = reactDescriptions[getRandInt(2)];
-  return(
-    <header>
-    <div>
-    <img src={reactLogo} alt="logo"></img>
-      <h1>React Essentials</h1>
-      <p>
-        {word} React concepts you will need to build any react apps
-      </p>        
-      </div>
-  </header>
-  )
-
-}
-
-function CoreConcepts(props){
-  return (
-    <li>
-    <img src={props.image} />
-    <h3>{props.title}</h3>
-    <p>{props.description}</p>
-
-    </li>
-  )
-}
-
-
-
 function App() {
+
+  const [selectedTopic, setSelectedTopic] = useState('');
+
+  function handleSelect(selectedButton){
+    setSelectedTopic(selectedButton);
+    //console.log(selectedButton);
+}
+
   const [count, setCount] = useState(0)
   return (
     <>
@@ -51,14 +24,28 @@ function App() {
         <section id="core-concepts">
           <h2>Core React Concepts</h2>
           <ul>
-          <CoreConcepts {...CORE_CONCEPTS[0]} />
-          <CoreConcepts {...CORE_CONCEPTS[1]} />
-          <CoreConcepts {...CORE_CONCEPTS[2]} />
-          <CoreConcepts {...CORE_CONCEPTS[3]} />
+          {CORE_CONCEPTS.map((conceptItem) => ( <CoreConcepts key={conceptItem.title} {...conceptItem} /> ))}
+  
           </ul>
-        </section>
-        
+        </section>       
         <h2>Time to get Started! Yay!</h2>
+
+        <section id='examples'>
+        <h2>Examples</h2>
+        <menu>
+        <TabButton isSelected = {selectedTopic === 'components'} onSelect={() => handleSelect('components')}>Component</TabButton>
+        <TabButton isSelected = {selectedTopic === 'jsx'} onSelect={() =>handleSelect('jsx')}>JSX</TabButton>
+        <TabButton isSelected = {selectedTopic === 'props'} onSelect={() =>handleSelect('props')}>Props</TabButton>
+        <TabButton isSelected = {selectedTopic === 'state'} onSelect={() =>handleSelect('state')}>State</TabButton>
+        </menu>
+
+        {!selectedTopic ? <p>Please select a topic</p> : (<div id='tab-content'>
+        <h3>{EXAMPLES[selectedTopic].title}</h3>
+        <p>{EXAMPLES[selectedTopic].description}</p>
+        <pre><code>{EXAMPLES[selectedTopic].code}</code></pre>
+        </div>)}
+
+        </section>
       </main>
     </>
   )
